@@ -1,3 +1,4 @@
+itertools
 mesa~=2.0
 numpy
 pandas
