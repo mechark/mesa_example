@@ -59,6 +59,8 @@ class Person(RandomWalker):
         # person's bank, set at __init__, all people have the same bank in this model
         self.bank = bank
 
+
+
     def do_business(self):
         """check if person has any savings, any money in wallet, or if the
         bank can loan them any money"""
@@ -173,12 +175,27 @@ class Person(RandomWalker):
         # increase the bank's outstanding loans
         self.bank.bank_loans += amount
 
+    def make_purchase(self):
+        # Сума покупки - випадкова між 1 і 3 одиниць грошей
+        purchase_amount = self.model.random.randint(1, 3)
+        
+        # Перевіряємо, чи є достатньо грошей в гаманці
+        if self.wallet >= purchase_amount:
+            self.wallet -= purchase_amount  # Витрачаємо гроші
+        else:
+            # Якщо недостатньо грошей у гаманці, беремо кредит
+            self.loans += purchase_amount    
+
     # step is called for each agent in model.BankReservesModel.schedule.step()
     def step(self):
         # move to a cell in my Moore neighborhood
         self.random_move()
         # trade
         self.do_business()
+
+        # Make purchase
+        self.make_purchase()
+
         # deposit money or take out a loan
         self.balance_books()
         # update the bank's reserves and the amount it can loan right now
